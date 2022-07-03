@@ -6,6 +6,7 @@
 #include "exit.h"
 #include "room.h"
 #include "player.h"
+#include "object.h"
 #include "world.h"
 
 // ----------------------------------------------------
@@ -14,52 +15,109 @@ World::World()
 	tick_timer = clock();
 
 	// Rooms ----
-	Room* forest = new Room("Forest", "You are surrounded by tall trees. It feels like a huge forest someone could get lost easily.");
-	Room* house = new Room("House", "You are inside a beautiful but small white house.");
-	Room* basement = new Room("Basement", "The basement features old furniture and dim light.");
+	Room* demonRoom = new Room("Demon Room", "You are in a room with a demon");
+	Room* darkRoom = new Room("Dark Room", "You are inside a dark room");
+	Room* fireRoom = new Room("Fire Room", "This is room is completely red and hot");
+	Room* iceRoom = new Room("Ice Room", "You are in a freezer, you're going to get a flue");
+	Room* cosyRoom = new Room("Cosy Room", "It's a cosy place, The carpet has something extrange");
+	Room* wizardRoom = new Room("Wizard Room", "You are in a cage but there is magic in the air");
 
-	Exit* ex1 = new Exit("west", "east", "Little path", house, forest);
-	Exit* ex2 = new Exit("down", "up", "Stairs", house, basement);
-	ex2->locked = true;
+	//Exits
+	Exit* ex1 = new Exit("west", "east", "Door", demonRoom, darkRoom);
+	Exit* ex2FireDoor = new Exit("north", "south", "Hot door", demonRoom, fireRoom);
+	Exit* ex3Ice = new Exit("south", "north", "Ice", demonRoom, iceRoom);
+	Exit* ex4LuxuryDoor = new Exit("east", "west", "Luxury door", demonRoom, cosyRoom);
+	Exit* ex5SecretStairs = new Exit("down", "up", "Secret Stairs", cosyRoom, wizardRoom);
 
-	entities.push_back(forest);
-	entities.push_back(house);
-	entities.push_back(basement);
+	ex2FireDoor->locked = true;
+	ex3Ice->locked = true;
+	ex4LuxuryDoor->locked = true;
+	ex5SecretStairs->locked = true;
+
+	entities.push_back(demonRoom);
+	entities.push_back(darkRoom);
+	entities.push_back(fireRoom);
+	entities.push_back(iceRoom);
+	entities.push_back(cosyRoom);
+	entities.push_back(wizardRoom);
 
 	entities.push_back(ex1);
-	entities.push_back(ex2);
+	entities.push_back(ex2FireDoor);
+	entities.push_back(ex3Ice);
+	entities.push_back(ex4LuxuryDoor);
+	entities.push_back(ex5SecretStairs);
 
 	// Creatures ----
-	Creature* butler = new Creature("Butler", "It's James, the house Butler.", house);
-	butler->hit_points = 10;
+	Creature* demon = new Creature("Demon", "It's a Demon, I need to defeat him in order to scape.", demonRoom);
+	demon->hit_points = 50;
+	Creature* wizard = new Creature("Wizard", "It's little Wizard.", wizardRoom);
+	wizard->hit_points = 1000000000;
+	demon->isLocked=true;
+	wizard->isLocked = true;
+	
+	entities.push_back(demon);
+	entities.push_back(wizard);
 
-	entities.push_back(butler);
+	//Static Objects
+	Object* fire = new Object("Fire", "It's fire and there is a gem in it", fireRoom);
+	Object* waterTab = new Object("WaterTab", "It's fire and there is a gem in it", demonRoom);
+	Object* carpet = new Object("Carpet", "It's fire and there is a gem in it", cosyRoom);
+	Object* cage = new Object("Cage", "A cage with a demon in it", demonRoom);
+	Object* rope = new Object("Rope", "A rope too tied, I would need to cut it", wizardRoom);
 
 	// Items -----
-	Item* mailbox = new Item("Mailbox", "Looks like it might contain something.", house);
-	Item* key = new Item("Key", "Old iron key.", mailbox);
-	ex2->key = key;
+	Item* woodSword = new Item("WoodSword", "A wood sword", darkRoom,WEAPON);
+	Item* fireSword = new Item("FireSword", "A fire sword", woodSword, WEAPON);
+	Item* steelSword = new Item("SteelSword", "A wood sword", wizard, WEAPON);
+	Item* iceSword = new Item("IceSword", "A ice sword", steelSword, WEAPON);
+	Item* fireGem = new Item("FireGem", "A wood sword", fire);
+	Item* iceGem = new Item("IceGem", "A wood sword", iceRoom);
+	Item* firekey = new Item("FireKey", "A wood sword", cosyRoom);
+	Item* luxurykey = new Item("LuxuryKey", "A wood sword", darkRoom);
+	Item* demonicKey = new Item("DemonicKey", "It looks like a demonic key", wizardRoom);
+	Item* knife = new Item("Knife", "A wood sword", iceRoom);
+	Item* bucket = new Item("Bucket", "A wood sword", cosyRoom);
 
-	Item* sword = new Item("Sword", "A simple old and rusty sword.", forest, WEAPON);
-	sword->min_value = 2;
-	sword->max_value = 6;
+	ex2FireDoor->key = firekey;
+	ex3Ice->key = fireSword;
+	ex4LuxuryDoor->key = luxurykey;
+	ex5SecretStairs->key = knife;
 
-	Item* sword2(sword);
-	sword2->parent = butler;
+	cage->key = demonicKey;
+	cage->destroyKey = true;
+	rope->key = knife;
+	cage->destroyKey = true;
+	fire->key = bucket;
+	fire->destroyKey = true;
 
-	Item* shield = new Item("Shield", "An old wooden shield.", butler, ARMOUR);
-	shield->min_value = 1;
-	shield->max_value = 3;
-	butler->AutoEquip();
 
-	entities.push_back(mailbox);
-	entities.push_back(sword);
-	entities.push_back(shield);
+	woodSword->min_value = 1;
+	woodSword->max_value = 1;
+	fireSword->min_value = 10;
+	fireSword->max_value = 15;
+	steelSword->min_value = 10;
+	steelSword->max_value = 15;
+	iceSword->min_value = 20;
+	iceSword->max_value = 30;
+
+	entities.push_back(woodSword);
+	entities.push_back(fireSword);
+	entities.push_back(steelSword);
+	entities.push_back(iceSword);
+	entities.push_back(fireGem);
+	entities.push_back(iceGem);
+	entities.push_back(firekey);
+	entities.push_back(luxurykey);
+	entities.push_back(knife);
+	entities.push_back(bucket);
 
 	// Player ----
-	player = new Player("Hero", "You are an awesome adventurer!", forest);
+	player = new Player("Hero", "You woke up in a dungeon", demonRoom);
 	player->hit_points = 25;
+
 	entities.push_back(player);
+
+
 }
 
 // ----------------------------------------------------
@@ -190,6 +248,10 @@ bool World::ParseCommand(vector<string>& args)
 			else if(Same(args[0], "loot") || Same(args[0], "lt"))
 			{
 				player->Loot(args);
+			}
+			else if (Same(args[0], "talk") || Same(args[0], "t"))
+			{
+				player->Talk(args);
 			}
 			else
 				ret = false;

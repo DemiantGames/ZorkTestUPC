@@ -24,6 +24,8 @@ public:
 	void Look() const;
 	int GetValue() const;
 
+	void Use(const string& name) const;
+
 public :
 	int min_value;
 	int max_value;

@@ -14,9 +14,9 @@ public:
 	Object(const char* name, const char* description, Entity* parent);
 	~Object();
 	void Look() const;
-
 public:
-
+	Entity* key;
+	bool destroyKey;
 };
 
 #endif //__Item__

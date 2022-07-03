@@ -25,6 +25,7 @@ public:
 	virtual bool AutoEquip();
 	virtual bool Lock(const vector<string>& args);
 	virtual bool UnLock(const vector<string>& args);
+	virtual void Talk(const vector<string>& args);
 	virtual void Tick();
 
 	virtual bool Attack(const vector<string>& args);
@@ -45,9 +46,13 @@ public :
 	int max_damage;
 	int min_protection;
 	int max_protection;
+	bool isLocked;
 	Creature* combat_target;
 	Item* weapon;
 	Item* armour;
+	
+	vector<string> dialogues;
+	int currentDialogue;
 };
 
 #endif //__Creature__

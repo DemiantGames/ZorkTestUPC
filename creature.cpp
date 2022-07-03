@@ -384,3 +384,24 @@ void Creature::Stats() const
 	cout << ((armour) ? armour->min_value : min_protection) << "-" << ((armour) ? armour->max_value : max_protection);
 	cout << "\n";
 }
+
+void Creature::Talk(const vector<string>& args)
+{
+	if (!IsAlive())
+		return;
+
+	Creature* creature;// = GetRoom()->GetCreature(args[1]);
+
+	if (creature == NULL)
+	{
+		cout << "\nThere is no creature at '" << args[1] << "'.\n";
+	}
+
+	if (creature->IsAlive() == false)
+	{
+		cout << "\This creature can't talk.\n";
+	}
+
+	cout << creature->dialogues[creature->currentDialogue];
+
+}

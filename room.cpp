@@ -4,6 +4,7 @@
 #include "item.h"
 #include "creature.h"
 #include "room.h"
+#include "object.h"
 
 // ----------------------------------------------------
 Room::Room(const char* title, const char* description) :
@@ -55,6 +56,18 @@ void Room::Look() const
 		}
 	}
 
+	// List objects --
+	for (list<Entity*>::const_iterator it = container.begin(); it != container.cend(); ++it)
+	{
+		if ((*it)->type == OBJECT)
+		{
+			Object* cr = (Object*)*it;
+			cout << "\nThere is : " << cr->name;
+			/*if (cr->IsAlive() == false)
+				cout << " (dead)";*/
+		}
+	}
+
 	cout << "\n";
 }
 
@@ -74,4 +87,18 @@ Exit* Room::GetExit(const string& direction) const
 	return NULL;
 }
 
+Creature* Room::GetCreature(const string& name) const
+{
+	for (list<Entity*>::const_iterator it = container.begin(); it != container.cend(); ++it)
+	{
+		if ((*it)->type == CREATURE)
+		{
+			Creature* creature = (Creature*)*it;
+			if (Same(creature->name, name))
+				return creature;
+		}
+	}
+
+	return NULL;
+}
 

@@ -8,12 +8,14 @@
 Object::Object(const char* title, const char* description, Entity* parent) :
 	Entity(title, description, parent)
 {
-
+	type = OBJECT;
 }
 
 // ----------------------------------------------------
 Object::~Object()
-{}
+{
+	type = OBJECT;
+}
 
 // ----------------------------------------------------
 void Object::Look() const
@@ -30,4 +32,3 @@ void Object::Look() const
 			cout << (*it)->name << "\n";
 	}
 }
-

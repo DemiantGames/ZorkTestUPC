@@ -38,3 +38,8 @@ int Item::GetValue() const
 {
 	return Roll(min_value, max_value);
 }
+
+void Item::Use(const string& name) const
+{
+
+}

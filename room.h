@@ -4,8 +4,8 @@
 #include <string>
 #include <list>
 #include "entity.h"
-
 class Exit;
+class Creature;
 class Item;
 
 using namespace std;
@@ -19,8 +19,10 @@ public:
 	void Look() const;
 
 	Exit* GetExit(const string& direction) const;
+	Creature* GetCreature(const string& args) const;
+
 
 public :
 };
 
-#endif //__Room__
+#endif

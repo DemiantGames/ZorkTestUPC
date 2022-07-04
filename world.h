@@ -11,6 +11,7 @@ using namespace std;
 
 class Entity;
 class Player;
+class Recipe;
 
 class World
 {
@@ -27,6 +28,7 @@ private:
 
 	clock_t tick_timer;
 	list<Entity*> entities;
+	vector<Recipe*> recipes;
 	Player* player;
 };
 

@@ -4,6 +4,7 @@
 #include "exit.h"
 #include "item.h"
 #include "player.h"
+#include "recipe.h"
 
 // ----------------------------------------------------
 Player::Player(const char* title, const char* description, Room* room) :
@@ -181,6 +182,56 @@ bool Player::Drop(const vector<string>& args)
 		return true;
 	}
 	
+	return false;
+}
+// ----------------------------------------------------
+Recipe* GetRecipe(Entity* item1, Entity* item2, vector<Recipe*> recipes) {
+	for (int i = 0; i < recipes.size(); i++)
+	{
+		if (std::find(recipes[i]->ingredients.begin(), recipes[i]->ingredients.end(), item1) != recipes[i]->ingredients.end() && std::find(recipes[i]->ingredients.begin(), recipes[i]->ingredients.end(), item2) != recipes[i]->ingredients.end())
+		{
+			return recipes[i];
+		}
+	}
+	return NULL;
+}
+// ----------------------------------------------------
+bool Player::Combine(const vector<string>& args, vector<Recipe*> recipes)
+{
+	if (!IsAlive())
+		return false;
+
+	Item* item1 = (Item*)Find(args[1], ITEM);
+	Item* item2 = (Item*)Find(args[3], ITEM);
+
+	if (item1 == NULL)
+	{
+		cout << "\nThere is no item at '" << args[1] << "'.\n";
+		return false;
+	}
+	if (item2 == NULL)
+	{
+		cout << "\nThere is no item at '" << args[3] << "'.\n";
+		return false;
+	}
+
+	Recipe* recipe = GetRecipe(item1, item2, recipes);
+	if (recipe == NULL) {
+		cout << "\nThere is no recipe with this ingredients.\n";
+	}
+
+
+	recipe->result->ChangeParentTo(this);
+
+	cout << "\nYou recieved " << recipe->result->name << "...\n";
+
+
+
+	return true;
+}
+
+bool Player::Use(const vector<string>& args)
+{
 	return false;
 }
 

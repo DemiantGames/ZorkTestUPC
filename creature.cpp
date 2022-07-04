@@ -390,7 +390,7 @@ void Creature::Talk(const vector<string>& args)
 	if (!IsAlive())
 		return;
 
-	Creature* creature;// = GetRoom()->GetCreature(args[1]);
+	Creature* creature= GetRoom()->GetCreature(args[1]);
 
 	if (creature == NULL)
 	{

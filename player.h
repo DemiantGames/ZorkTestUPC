@@ -2,6 +2,7 @@
 #define __Player__
 
 #include "creature.h"
+#include "recipe.h"
 
 using namespace std;
 
@@ -15,6 +16,8 @@ public:
 	void Look(const vector<string>& args) const;
 	bool Take(const vector<string>& args);
 	bool Drop(const vector<string>& args);
+	bool Combine(const vector<string>& args, vector<Recipe*> recipes);
+	bool Use(const vector<string>& args);
 	void Inventory() const;
 	bool Equip(const vector<string>& args);
 	bool UnEquip(const vector<string>& args);

@@ -8,7 +8,7 @@
 #include "player.h"
 #include "object.h"
 #include "world.h"
-
+#include "recipe.h"
 // ----------------------------------------------------
 World::World()
 {
@@ -61,22 +61,23 @@ World::World()
 	//Static Objects
 	Object* fire = new Object("Fire", "It's fire and there is a gem in it", fireRoom);
 	Object* waterTab = new Object("WaterTab", "It's fire and there is a gem in it", demonRoom);
-	Object* carpet = new Object("Carpet", "It's fire and there is a gem in it", cosyRoom);
+	Object* carpet = new Object("Carpet", "There is a scratches, it look's like something is hidden", cosyRoom);
 	Object* cage = new Object("Cage", "A cage with a demon in it", demonRoom);
 	Object* rope = new Object("Rope", "A rope too tied, I would need to cut it", wizardRoom);
 
 	// Items -----
 	Item* woodSword = new Item("WoodSword", "A wood sword", darkRoom,WEAPON);
-	Item* fireSword = new Item("FireSword", "A fire sword", woodSword, WEAPON);
+	Item* fireSword = new Item("FireSword", "A fire sword", NULL, WEAPON);
 	Item* steelSword = new Item("SteelSword", "A wood sword", wizard, WEAPON);
-	Item* iceSword = new Item("IceSword", "A ice sword", steelSword, WEAPON);
-	Item* fireGem = new Item("FireGem", "A wood sword", fire);
-	Item* iceGem = new Item("IceGem", "A wood sword", iceRoom);
-	Item* firekey = new Item("FireKey", "A wood sword", cosyRoom);
-	Item* luxurykey = new Item("LuxuryKey", "A wood sword", darkRoom);
+	Item* iceSword = new Item("IceSword", "A ice sword", NULL, WEAPON);
+	Item* fireGem = new Item("FireGem", "A fire gem", fire);
+	Item* iceGem = new Item("IceGem", "An ice gem", iceRoom);
+	Item* firekey = new Item("FireKey", "A red hot key", cosyRoom);
+	Item* luxurykey = new Item("LuxuryKey", "A luxury key", darkRoom);
 	Item* demonicKey = new Item("DemonicKey", "It looks like a demonic key", wizardRoom);
-	Item* knife = new Item("Knife", "A wood sword", iceRoom);
-	Item* bucket = new Item("Bucket", "A wood sword", cosyRoom);
+	Item* knife = new Item("Knife", "A sharp knife", iceRoom);
+	Item* bucket = new Item("Bucket", "A bucket", cosyRoom);
+	Item* waterBucket = new Item("WaterBucket", "A bucket with water", NULL);
 
 	ex2FireDoor->key = firekey;
 	ex3Ice->key = fireSword;
@@ -111,6 +112,14 @@ World::World()
 	entities.push_back(knife);
 	entities.push_back(bucket);
 
+	//Recipes
+	Recipe* recipe1=new Recipe({ woodSword,fireGem },fireSword);
+	Recipe* recipe2 = new Recipe({ bucket,waterTab }, waterBucket);
+	Recipe* recipe3 = new Recipe({ iceGem,steelSword }, iceSword);
+
+	recipes.push_back(recipe1);
+	recipes.push_back(recipe2);
+	recipes.push_back(recipe3);
 	// Player ----
 	player = new Player("Hero", "You woke up in a dungeon", demonRoom);
 	player->hit_points = 25;
@@ -278,6 +287,14 @@ bool World::ParseCommand(vector<string>& args)
 			else if(Same(args[0], "drop") || Same(args[0], "put"))
 			{
 				player->Drop(args);
+			}
+			else if(Same(args[0], "notch") || Same(args[0], "combine"))
+			{
+				player->Combine(args,recipes);
+			}
+			else if (Same(args[0], "use"))
+			{
+				//player->Use(args);
 			}
 			else
 				ret = false;

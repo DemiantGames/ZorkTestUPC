@@ -11,11 +11,12 @@ using namespace std;
 class Recipe 
 {
 public:
-	Recipe(list<Entity*> recipe, Entity* result);
+	Recipe(vector<Entity*> recipe, vector<bool> isDestroyable, Entity* result);
 	~Recipe();
 
 public:
-	list<Entity*> ingredients;
+	vector<Entity*> ingredients;
+	vector<bool> isDestroyable;
 	Entity* result;
 };
 

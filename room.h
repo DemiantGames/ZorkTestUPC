@@ -6,6 +6,7 @@
 #include "entity.h"
 class Exit;
 class Creature;
+class Object;
 class Item;
 
 using namespace std;
@@ -20,6 +21,7 @@ public:
 
 	Exit* GetExit(const string& direction) const;
 	Creature* GetCreature(const string& args) const;
+	Object* GetObject(const string& name) const;
 
 
 public :

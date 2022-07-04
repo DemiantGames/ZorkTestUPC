@@ -6,9 +6,10 @@
 #include "recipe.h"
 
 
-Recipe::Recipe(list<Entity*> recipe, Entity* result)
+Recipe::Recipe(vector<Entity*> recipe, vector<bool> isDestroyable, Entity* result)
 {
 	this->ingredients = recipe;
+	this->isDestroyable = isDestroyable;
 	this->result = result;
 }
 Recipe::~Recipe()

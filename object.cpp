@@ -9,6 +9,7 @@ Object::Object(const char* title, const char* description, Entity* parent) :
 	Entity(title, description, parent)
 {
 	type = OBJECT;
+	captive = NULL;
 }
 
 // ----------------------------------------------------

@@ -16,6 +16,7 @@ public:
 	void Look() const;
 public:
 	Entity* key;
+	Entity* captive;
 	bool destroyKey;
 };
 

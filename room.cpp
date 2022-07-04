@@ -102,3 +102,16 @@ Creature* Room::GetCreature(const string& name) const
 	return NULL;
 }
 
+Object* Room::GetObject(const string& name) const
+{
+	for (list<Entity*>::const_iterator it = container.begin(); it != container.cend(); ++it)
+	{
+		if ((*it)->type == OBJECT)
+		{
+			Object* object = (Object*)*it;
+			if (Same(object->name, name))
+				return object;
+		}
+	}
+	return NULL;
+}

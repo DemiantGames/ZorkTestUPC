@@ -39,6 +39,7 @@ public :
 
 	Entity* parent;
 	list<Entity*> container;
+	bool isLocked;
 };
 
 #endif //__Entity__

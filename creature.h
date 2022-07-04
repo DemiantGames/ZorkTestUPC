@@ -46,7 +46,6 @@ public :
 	int max_damage;
 	int min_protection;
 	int max_protection;
-	bool isLocked;
 	Creature* combat_target;
 	Item* weapon;
 	Item* armour;

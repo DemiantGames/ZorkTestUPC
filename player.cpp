@@ -32,7 +32,15 @@ void Player::Look(const vector<string>& args) const
 				return;
 			}
 		}
-
+		// add here items description
+		for (list<Entity*>::const_iterator it = container.begin(); it != container.cend(); ++it)
+		{
+			if (Same((*it)->name, args[1]) || ((*it)->type == EXIT && Same(args[1], ((Exit*)(*it))->GetNameFrom((Room*)parent))))
+			{
+				(*it)->Look();
+				return;
+			}
+		}
 		if (Same(args[1], "me"))
 		{
 			cout << "\n" << name << "\n";
@@ -240,7 +248,7 @@ bool Player::Combine(const vector<string>& args, vector<Recipe*> recipes)
 				Object* tempObject = (Object*)recipe->ingredients[i];
 				if (tempObject != NULL && tempObject->captive != NULL) {
 					tempObject->captive->isLocked = false;
-					cout << "" << tempObject->captive->name << " is free now\n";
+					cout << "\n"<< tempObject->captive->name << " is free now\n";
 				}
 			}
 

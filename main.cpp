@@ -24,7 +24,7 @@ int main()
 	cout << "----------------\n";
 
 	World my_world;
-
+	my_world.ShowCommands();
 	args.push_back("look");
 
 	while(1)

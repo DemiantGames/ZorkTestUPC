@@ -10,12 +10,6 @@
 #include "world.h"
 #include "recipe.h"
 // ----------------------------------------------------
-//TODO READ ME
-//TODO CHANGE DIALOGUES
-//TODO HELP AND COMMANDS INSTRUCTIONS 
-//TODO COMPLETE THE MAIN FLOW OF THE GAME
-//TODO BATTLE SYSTEM
-
 
 World::World()
 {
@@ -61,18 +55,18 @@ World::World()
 
 	// Creatures ----
 	Creature* demon = new Creature("Demon", "It's a Demon, I need to defeat him in order to scape.", demonRoom);
-	demon->hit_points = 50;
-	demon->max_damage = 5;
-	demon->min_damage = 2;
+	demon->hit_points = 80;
+	demon->max_damage = 15;
+	demon->min_damage = 5;
 	demon->isLocked = true;
-	demon->dialogues = { "I'm in this cage","If you help me out I help you to scape out of this place" };
+	demon->dialogues = { "I'm in this cage. If you help me out I help you to scape out of this place","Hahaha I won't help you out. You Fool!","Hahaha, you are so naive","Never trust a demon" };
 	Creature* wizard = new Creature("Wizard", "It's little Wizard.", wizardRoom);
 	wizard->hit_points = 1000000000;
 	wizard->max_damage = 1;
 	wizard->min_damage = 1;
 	wizard->isLocked = true;
-	wizard->dialogues = { "Help me! And then I'll give you my magical Sword","You will need this powerfull sword","The demon is weak to ice, maybe you should attack him with an ice sword" };
-	
+	wizard->dialogues = { "Help me! And then I'll give you my magical Sword","Thanks, I'm free now","The demon is weak to ice, maybe you should attack him with an ice sword", "My sword can take the power of the gems" };
+
 	entities.push_back(demon);
 	entities.push_back(wizard);
 
@@ -82,12 +76,18 @@ World::World()
 	Object* carpet = new Object("Carpet", "There is a scratches, it look's like something is hidden", cosyRoom);
 	Object* cage = new Object("Cage", "A cage with a demon in it", demonRoom);
 	Object* rope = new Object("Rope", "A rope too tied, I would need to cut it", wizardRoom);
-
+	
+	entities.push_back(fire);
+	entities.push_back(waterTab);
+	entities.push_back(carpet);
+	entities.push_back(cage);
+	entities.push_back(rope);
+	
 	// Items -----
 	Item* woodSword = new Item("WoodSword", "A wood sword", darkRoom, WEAPON);
 	Item* fireSword = new Item("FireSword", "A fire sword", NULL, WEAPON);
-	Item* steelSword = new Item("SteelSword", "A wood sword", wizard, WEAPON);
-	Item* iceSword = new Item("IceSword", "A ice sword", NULL, WEAPON);
+	Item* steelSword = new Item("SteelSword", "A steel magical sword", wizard, WEAPON);
+	Item* iceSword = new Item("IceSword", "An ice sword", NULL, WEAPON);
 	Item* fireGem = new Item("FireGem", "A fire gem", NULL);
 	Item* iceGem = new Item("IceGem", "An ice gem", iceRoom);
 	Item* firekey = new Item("FireKey", "A red hot key", cosyRoom);
@@ -96,10 +96,7 @@ World::World()
 	Item* knife = new Item("Knife", "A sharp knife", iceRoom);
 	Item* bucket = new Item("Bucket", "A bucket", cosyRoom);
 	Item* waterBucket = new Item("WaterBucket", "A bucket with water", NULL);
-	
-	//TEST
-	//Item* knife = new Item("Knife", "A sharp knife", wizardRoom);
-
+	Item* letter = new Item("Letter", "Congratulations, You beat the demon and now you are free \nCreated by Demian Alvear", demon);
 	ex2FireDoor->key = firekey;
 	ex2FireDoor->destroyKey = true;
 	ex3Ice->key = fireSword;
@@ -136,8 +133,11 @@ World::World()
 	entities.push_back(iceGem);
 	entities.push_back(firekey);
 	entities.push_back(luxurykey);
+	entities.push_back(demonicKey);
 	entities.push_back(knife);
 	entities.push_back(bucket);
+	entities.push_back(waterBucket);
+	entities.push_back(letter);
 
 	//Recipes
 	Recipe* recipe1 = new Recipe({ woodSword,fireGem }, { true,true }, fireSword);
@@ -160,7 +160,11 @@ World::World()
 
 	entities.push_back(player);
 
-
+	//testing
+	//iceSword->ChangeParentTo(player);
+	//steelSword->ChangeParentTo(player);
+	//demonicKey->ChangeParentTo(player);
+	//knife->ChangeParentTo(player);
 }
 
 // ----------------------------------------------------
@@ -249,6 +253,10 @@ bool World::ParseCommand(vector<string>& args)
 		else if (Same(args[0], "inventory") || Same(args[0], "i"))
 		{
 			player->Inventory();
+		}
+		else if (Same(args[0], "help") || Same(args[0], "h"))
+		{
+			ShowCommands();
 		}
 		else
 			ret = false;
@@ -340,4 +348,28 @@ bool World::ParseCommand(vector<string>& args)
 	}
 
 	return ret;
+}
+
+void World::ShowCommands() {
+
+	string info = "\nUseful commands :\n";
+	info = info + "\nThe 'UNLOCK' command open exits that are lock, Example: 'unlock west with key'";
+	info = info + "\nThe 'USE' command is for use things. Example: 'use scissors in paper'";
+	info = info + "\nThe 'NOTCH' and 'COMBINE' commands can be used to create new items. Example: 'combine water with bucket'";
+	info = info + "\nThe 'LOOK' command show information about items, rooms or exits. Example: 'look chandelier'";
+	info = info + "\nThe 'EXAMINE' command show the stats and equipment of a creature. Example: 'examine goblin'";
+	info = info + "\nThe 'LOOT' command takes the items of a dead creature. Example: 'loot goblin' ";
+	info = info + "\nThe 'TALK' command is useful to get information with creatures Example: 'talk with goblin'";
+	info = info + "\nThe 'INVENTORY' command  shows the inventory";
+	info = info + "\nThe 'STATS' command shows the player stats";
+	info = info + "\nThe 'TAKE' and 'PICK' commands put items in the room in the inventory";
+	info = info + "\nThe 'DROP' and 'PUT' commands drop items in the invetory";
+	info = info + "\nThe 'ATTACK' command attack a creature";
+	info = info + "\nThe 'EQUIP' and 'UNEQUIP' commands equip and unequip weapons respectively. Example: 'equip longSword'";
+
+	info = info + "\n\nDirections : NORTH, SOUTH, EAST, WEST, UP,  DOWN,";
+	info = info + "\nThe 'HELP' command show all the commands\n";
+
+	cout << info;
+
 }

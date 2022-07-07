@@ -15,6 +15,7 @@ Creature::Creature(const char* title, const char* description, Room* room) :
 	weapon = armour = NULL;
 	combat_target = NULL;
 	currentDialogue = 0;
+	isFrozen = false;
 }
 
 // ----------------------------------------------------
@@ -315,14 +316,16 @@ int Creature::MakeAttack()
 		combat_target = combat_target->combat_target = NULL;
 		return false;
 	}
-
 	int result = (weapon) ? weapon->GetValue() : Roll(min_damage, max_damage);
+	if (isFrozen) { result = 0; }
 
 	if (PlayerInRoom())
 		cout << name << " attacks " << combat_target->name << " for " << result << "\n";
 
 	combat_target->ReceiveAttack(result);
-
+	if (weapon != NULL && Same(weapon->name, "IceSword")) {
+		combat_target->isFrozen = true;
+	}
 	// make the attacker react and take me as a target
 	if (combat_target->combat_target == NULL)
 		combat_target->combat_target = this;
@@ -410,8 +413,19 @@ void Creature::Talk(const vector<string>& args)
 	{
 		cout << "\nThis creature can't talk.\n";
 	}
+	if (creature->isLocked) {
+		creature->currentDialogue = 0;
+	}
+	else
+	{
+		creature->currentDialogue++;
+		if (creature->currentDialogue >= creature->dialogues.size()) {
+			creature->currentDialogue = 1;
+		}
+	}
+
 	if (creature->dialogues.size() > 0 && creature->currentDialogue < creature->dialogues.size()) {
-		cout << "\n"<<creature->dialogues[creature->currentDialogue]<<"";
+		cout << "\n" << creature->name << " says :" << creature->dialogues[creature->currentDialogue] << "\n";
 	}
 	else {
 		cout << "\nThis creature doesn't want to talk.\n";
